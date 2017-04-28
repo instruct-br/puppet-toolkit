@@ -1,0 +1,14 @@
+language: ruby
+rvm:
+  - 2.2
+script:
+  - "bundle exec rake reek"
+  - "bundle exec rake rubocop"
+  - "bundle exec rake yamllint"
+  - "bundle exec rake shellcheck"
+addons:
+  apt:
+    sources:
+      - debian-sid
+    packages:
+      - shellcheck

@@ -1,0 +1,28 @@
+---
+defaults:
+  memory: 1024
+  cpus: 1
+  domain: 'dev'
+  network_prefix: '172.22.0'
+  synced_folder_type: 'nfs'
+nodes:
+  puppet:
+    memory: 2048
+    cpus: 2
+    box: centos/7
+  centos-7:
+    box: centos/7
+  centos-6:
+    box: centos/6
+  ubuntu-16.04:
+    box: ubuntu/xenial64
+  ubuntu-14.04:
+    box: ubuntu/trusty64
+  ubuntu-12.04:
+    box: ubuntu/precise64
+  debian-8:
+    box: debian/jessie64
+  sles-11:
+    box: elastic/sles-11-x86_64
+  sles-12:
+    box: elastic/sles-12-x86_64

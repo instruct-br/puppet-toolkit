@@ -1,0 +1,10 @@
+---
+AllCops:
+  TargetRubyVersion: 2.2
+  DisplayCopNames: true
+  Exclude:
+    - 'control-repo/**/*'
+
+Metrics/BlockLength:
+  CountComments: false
+  Max: 30
