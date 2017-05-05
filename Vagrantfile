@@ -20,6 +20,16 @@ Vagrant.configure('2') do |config|
 
   nodes.each_with_index do |(node, data), index|
     config.vm.define node do |n|
+      puppet_agent_version = if data.key?('puppet_agent_version')
+                               data['puppet_agent_version']
+                             else
+                               defaults['puppet_agent_version']
+                             end
+
+      unless puppet_agent_version =~ /\d\.\d{1,2}\.\d{1,2}/
+        raise "Invalid Puppet Agent version: #{puppet_agent_version}"
+      end
+
       memory = if data.key?('memory')
                  data['memory']
                else
@@ -41,7 +51,10 @@ Vagrant.configure('2') do |config|
       n.vm.box = data['box']
       n.vm.hostname = "#{node}.#{domain}"
       n.vm.network :private_network, ip: "#{network_prefix}.#{index + 100}"
-      n.vm.provision 'shell', path: 'puppet-agent-installer.sh'
+      n.vm.provision 'shell' do |s|
+        s.path = 'puppet-agent-installer.sh'
+        s.args = puppet_agent_version
+      end
     end
   end
 end

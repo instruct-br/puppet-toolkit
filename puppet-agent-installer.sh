@@ -4,11 +4,13 @@ set -e
 set -u
 set -o pipefail
 
+PUPPET_AGENT_VERSION=$1
+
 detect_rhel_7 ( ) {
 
   if egrep ' 7\.' /etc/redhat-release &> /dev/null; then
     rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
-    yum install -y puppet-agent
+    yum install -y "puppet-agent-${PUPPET_AGENT_VERSION}"
   fi
 
 }
@@ -17,7 +19,7 @@ detect_rhel_6 ( ) {
 
   if egrep ' 6\.' /etc/redhat-release &> /dev/null; then
     rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-6.noarch.rpm
-    yum install -y puppet-agent
+    yum install -y "puppet-agent-${PUPPET_AGENT_VERSION}"
   fi
 
 }
@@ -29,7 +31,7 @@ detect_ubuntu_1604 ( ) {
     curl -O http://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb
     dpkg -i puppetlabs-release-pc1-xenial.deb
     apt-get update
-    apt-get install puppet-agent
+    apt-get install "puppet-agent=${PUPPET_AGENT_VERSION}*"
   fi
 
 }
@@ -42,7 +44,8 @@ detect_ubuntu_1404 ( ) {
     dpkg -i puppetlabs-release-pc1-trusty.deb
     rm puppetlabs-release-pc1-trusty.deb
     apt-get update
-    apt-get install -y puppet-agent # Confirm because the box already comes with a puppet package installed
+    # Confirm because the box already comes with a puppet package installed
+    apt-get install -y "puppet-agent=${PUPPET_AGENT_VERSION}*"
     apt-get autoremove -y # The box comes with lots of not needed stuff
   fi
 
@@ -56,7 +59,8 @@ detect_ubuntu_1204 ( ) {
     dpkg -i puppetlabs-release-pc1-precise.deb
     rm puppetlabs-release-pc1-precise.deb
     apt-get update
-    apt-get install -y puppet-agent # Confirm because the box already comes with a puppet package installed
+    # Confirm because the box already comes with a puppet package installed
+    apt-get install -y "puppet-agent=${PUPPET_AGENT_VERSION}*"
     apt-get autoremove -y # The box comes with lots of not needed stuff
   fi
 
@@ -70,7 +74,7 @@ detect_debian_8 ( ) {
     dpkg -i puppetlabs-release-pc1-wheezy.deb
     rm puppetlabs-release-pc1-wheezy.deb
     apt-get update
-    apt-get install puppet-agent 
+    apt-get install "puppet-agent=${PUPPET_AGENT_VERSION}*"
   fi
 
 }
