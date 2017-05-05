@@ -7,3 +7,6 @@ AllCops:
 
 Metrics/BlockLength:
   Enabled: false
+
+Metrics/LineLength:
+  Max: 100
