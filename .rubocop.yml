@@ -6,5 +6,4 @@ AllCops:
     - 'control-repo/**/*'
 
 Metrics/BlockLength:
-  CountComments: false
-  Max: 30
+  Enabled: false
