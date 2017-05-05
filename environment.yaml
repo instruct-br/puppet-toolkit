@@ -27,3 +27,13 @@ nodes:
     box: elastic/sles-11-x86_64
   sles-12:
     box: elastic/sles-12-x86_64
+  windows-2012:
+    memory: 2048
+    cpus: 2
+    type: windows
+    box: opentable/win-2012r2-standard-amd64-nocm
+  windows-2008:
+    memory: 2048
+    cpus: 2
+    type: windows
+    box: opentable/win-2008r2-standard-amd64-nocm
