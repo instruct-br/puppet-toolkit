@@ -79,6 +79,21 @@ detect_debian_8 ( ) {
 
 }
 
+detect_sles_12 ( ) {
+
+  if egrep 'VERSION_ID="12' /etc/os-release &> /dev/null; then
+    # Remove an inacessible remote repository
+    zypper removerepo sles12-dvd1
+    # Remove a repository with incorrect URL
+    zypper removerepo devel_tools_scm
+    # Enable GPG check for the Puppet repositories
+    zypper modifyrepo -g puppetlabs-pc1 puppetlabs-pc1-source
+    # Update Puppet metadata to ensure the latest packages
+    zypper refresh puppetlabs-pc1
+   fi
+
+}
+
 detect_sles_11 ( ) {
 
   if egrep 'VERSION_ID="11' /etc/os-release &> /dev/null; then
@@ -86,6 +101,7 @@ detect_sles_11 ( ) {
     gem uninstall --all --executables facter hiera puppet
     zypper addrepo http://yum.puppetlabs.com/sles/11/PC1/x86_64/ puppetlabs-pc1
     zypper modifyrepo -G puppetlabs-pc1
+
     zypper install --oldpackage --no-recommends --no-confirm "puppet-agent=${PUPPET_AGENT_VERSION}"
   fi
 
@@ -98,3 +114,4 @@ detect_ubuntu_1404
 detect_ubuntu_1204
 detect_debian_8
 detect_sles_11
+detect_sles_12
