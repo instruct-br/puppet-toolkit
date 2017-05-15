@@ -9,7 +9,7 @@ PUPPET_AGENT_VERSION=$1
 detect_rhel_7 ( ) {
 
   if egrep ' 7\.' /etc/redhat-release &> /dev/null; then
-    rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+    yum install -y https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
     yum install -y "puppet-agent-${PUPPET_AGENT_VERSION}"
   fi
 
@@ -18,7 +18,7 @@ detect_rhel_7 ( ) {
 detect_rhel_6 ( ) {
 
   if egrep ' 6\.' /etc/redhat-release &> /dev/null; then
-    rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-6.noarch.rpm
+    yum install -y https://yum.puppetlabs.com/puppetlabs-release-pc1-el-6.noarch.rpm
     yum install -y "puppet-agent-${PUPPET_AGENT_VERSION}"
   fi
 
