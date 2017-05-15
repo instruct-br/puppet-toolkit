@@ -79,10 +79,22 @@ detect_debian_8 ( ) {
 
 }
 
+detect_sles_11 ( ) {
+
+  if egrep 'VERSION_ID="11' /etc/os-release &> /dev/null; then
+    # Remove old Puppet gems
+    gem uninstall --all --executables facter hiera puppet
+    zypper addrepo http://yum.puppetlabs.com/sles/11/PC1/x86_64/ puppetlabs-pc1
+    zypper modifyrepo -G puppetlabs-pc1
+    zypper install --oldpackage --no-recommends --no-confirm "puppet-agent=${PUPPET_AGENT_VERSION}"
+  fi
+
+}
+
 detect_rhel_6
 detect_rhel_7
 detect_ubuntu_1604
 detect_ubuntu_1404
 detect_ubuntu_1204
 detect_debian_8
-
+detect_sles_11
