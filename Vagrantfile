@@ -51,15 +51,15 @@ Vagrant.configure('2') do |config|
 
       if data.key?('type') && data['type'] == 'windows'
         n.vm.hostname = node
-        n.vm.communicator = "winrm"
-        n.vm.provider "virtualbox" do |v|
+        n.vm.communicator = 'winrm'
+        n.vm.provider 'virtualbox' do |v|
           v.gui = true
         end
         n.vm.synced_folder '.', '/vagrant', disabled: true
         n.vm.network 'forwarded_port', host: 3389, guest: 3389, auto_correct: true
         n.vm.provision 'shell' do |s|
           s.path = 'puppet-agent-installer.ps1'
-          s.args = ['-PuppetVersion',puppet_agent_version]
+          s.args = ['-PuppetVersion', puppet_agent_version]
         end
       else
         n.vm.hostname = "#{node}.#{domain}"
