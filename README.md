@@ -76,6 +76,5 @@ This choice helps us greatly reduce the risk of developing code that might fail 
 
 * Document our workflow
 * Instructions on how to configure text editor, tests, etc.
-* PowerShell script to install puppet-agent on Windows boxes
 * Use a local yaml file to avoid changing `environment.yaml`
 * Minimalistic Puppet module to configure Puppet Server
