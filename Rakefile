@@ -33,7 +33,7 @@ task :shellcheck do
 end
 
 desc 'Validate powershell script installer'
-task :powershellanalyzer do
-  system("powershell -Command 'Invoke-ScriptAnalyzer -Path puppet-agent-installer.ps1'")
-  raise 'Violations found using PowerShell analyzer' unless $CHILD_STATUS.success?
+task :powershellcheck do
+  system("powershell -Command 'Invoke-Pester -EnableExit -Script ./puppet-agent-installer.tests.ps1'")
+  raise 'Violations found using Pester and PSAnalyzer' unless $CHILD_STATUS.success?
 end
