@@ -3,12 +3,15 @@ dist: trusty
 sudo: required
 rvm:
   - 2.2
+before_script:
+  - "sudo powershell -Command 'Install-Module -Name PSScriptAnalyzer -SkipPublisherCheck -Force'"
+  - "sudo powershell -Command 'Install-Module -Name Pester -SkipPublisherCheck -Force'"
 script:
   - "bundle exec rake reek"
   - "bundle exec rake rubocop"
   - "bundle exec rake yamllint"
   - "bundle exec rake shellcheck"
-  - "bundle exec rake powershellanalyzer"
+  - "bundle exec rake powershellcheck"
 addons:
   apt:
     sources:
