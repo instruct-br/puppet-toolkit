@@ -1,0 +1,35 @@
+execute pathogen#infect()
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_auto_jump = 1
+let g:syntastic_loc_list_height = 3
+let g:syntastic_check_on_wq = 1
+let b:syntastic_mode = "active"
+let g:syntastic_yaml_checkers = ["yamllint"]
+
+syntax on
+set expandtab
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+set ai
+set fo=tcq
+set nocompatible
+set modeline
+set bg=dark
+highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
+match ExtraWhitespace /\s\+$/
+
+"au BufRead,BufNewFile *.pp
+"  \ set filetype=puppet
+"au BufRead,BufNewFile *_spec.rb
+"  \ nmap <F8> :!rspec --color %<CR>
+
+" Enable indentation matching for =>'s
+filetype plugin indent on
