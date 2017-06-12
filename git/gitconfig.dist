@@ -1,0 +1,10 @@
+[user]
+  name = Full Name
+  email = email@example.com
+[core]
+  pager = less -FRSX
+  editor = vim
+[color]
+  ui = auto
+[merge]
+  tool = vimdiff

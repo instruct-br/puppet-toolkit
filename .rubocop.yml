@@ -4,6 +4,7 @@ AllCops:
   DisplayCopNames: true
   Exclude:
     - 'control-repo/**/*'
+    - 'git/puppet-git-hooks/**/*'
 
 Metrics/BlockLength:
   Enabled: false
