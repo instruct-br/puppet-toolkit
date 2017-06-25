@@ -2,6 +2,11 @@ require 'yaml'
 
 Vagrant.require_version '>= 1.9.2'
 
+required_plugins = ['vagrant-hosts']
+required_plugins.each do |plugin|
+  raise "Run \'vagrant plugin install #{plugin}\'" unless Vagrant.has_plugin? plugin
+end
+
 env = YAML.load_file('environment.yaml')
 nodes = env['nodes']
 defaults = env['defaults']
