@@ -18,7 +18,7 @@ Describe 'Testing against PSSA rules' {
 
 	 $scriptAnalyzerRules = Get-ScriptAnalyzerRule
 
-   $analysis = Invoke-ScriptAnalyzer -Settings CodeFormatting -Path 'puppet-agent-installer.ps1'
+   $analysis = Invoke-ScriptAnalyzer -Settings puppet-agent-installer.codeformating.psd1 -Path 'puppet-agent-installer.ps1'
 
     forEach ($rule in $scriptAnalyzerRules) {
 			It "Should pass $rule" {
