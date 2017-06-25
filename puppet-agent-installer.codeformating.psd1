@@ -7,37 +7,37 @@
         'PSAlignAssignmentStatement'
     )
 
-    Rules        = @{
-        PSPlaceOpenBrace           = @{
-            Enable             = $true
-            OnSameLine         = $true
-            NewLineAfter       = $true
+    Rules = @{
+        PSPlaceOpenBrace = @{
+            Enable = $true
+            OnSameLine = $true
+            NewLineAfter = $true
             IgnoreOneLineBlock = $true
         }
 
-        PSPlaceCloseBrace          = @{
-            Enable             = $true
-            NewLineAfter       = $false
+        PSPlaceCloseBrace = @{
+            Enable = $true
+            NewLineAfter = $false
             IgnoreOneLineBlock = $true
-            NoEmptyLineBefore  = $false
+            NoEmptyLineBefore = $false
         }
 
         PSUseConsistentIndentation = @{
-            Enable          = $true
-            Kind            = 'space'
+            Enable = $true
+            Kind = 'space'
             IndentationSize = 4
         }
 
-        PSUseConsistentWhitespace  = @{
-            Enable         = $true
+        PSUseConsistentWhitespace = @{
+            Enable = $true
             CheckOpenBrace = $true
             CheckOpenParen = $true
-            CheckOperator  = $true
+            CheckOperator = $true
             CheckSeparator = $true
         }
 
         PSAlignAssignmentStatement = @{
-            Enable         = $true
+            Enable = $false
             CheckHashtable = $true
         }
     }
