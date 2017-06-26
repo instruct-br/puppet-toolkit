@@ -1,4 +1,4 @@
 #!/bin/bash
 
-rsync -av --delete vim "$HOME"/.vim || exit
+rsync -av --delete plugins/ "$HOME"/.vim || exit
 cp -r vimrc "$HOME"/.vimrc
