@@ -10,6 +10,7 @@ require 'fileutils'
 YamlLint::RakeTask.new do |t|
   t.paths = %w[
     environment.yaml
+    local.dist.yaml
     .rubocop.yml
     .travis.yml
   ]

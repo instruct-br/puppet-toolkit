@@ -10,6 +10,13 @@ end
 env = YAML.load_file('environment.yaml')
 nodes = env['nodes']
 defaults = env['defaults']
+
+if File.exist?('local.yaml')
+  local = YAML.load_file('local.yaml')
+  nodes.merge!(local['nodes']) if local.key?('nodes')
+  defaults.merge!(local['defaults']) if local.key?('defaults')
+end
+
 network_prefix = defaults['network_prefix']
 synced_folder_type = defaults['synced_folder_type']
 domain = defaults['domain']

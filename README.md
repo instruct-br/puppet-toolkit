@@ -75,6 +75,7 @@ This choice helps us greatly reduce the risk of developing code that might fail 
 ## TODO
 
 * Document our workflow
+* Document `local.yaml` usage
+* Rake task for starting development
 * Instructions on how to configure text editor, tests, etc.
-* Use a local yaml file to avoid changing `environment.yaml`
 * Minimalistic Puppet module to configure Puppet Server

@@ -1,0 +1,10 @@
+---
+defaults:
+  puppet_agent_version: '1.8.2'
+nodes:
+  server1:
+    box: centos/7
+  server2:
+    box: centos/7
+  server3:
+    box: centos/7
