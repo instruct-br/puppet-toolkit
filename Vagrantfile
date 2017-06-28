@@ -1,18 +1,19 @@
 require 'yaml'
 
 Vagrant.require_version '>= 1.9.2'
+vagrant_root = File.dirname(__FILE__)
 
 required_plugins = ['vagrant-hosts']
 required_plugins.each do |plugin|
   raise "Run \'vagrant plugin install #{plugin}\'" unless Vagrant.has_plugin? plugin
 end
 
-env = YAML.load_file('environment.yaml')
+env = YAML.load_file("#{vagrant_root}/environment.yaml")
 nodes = env['nodes']
 defaults = env['defaults']
 
-if File.exist?('local.yaml')
-  local = YAML.load_file('local.yaml')
+if File.exist?("#{vagrant_root}/local.yaml")
+  local = YAML.load_file("#{vagrant_root}/local.yaml")
   nodes.merge!(local['nodes']) if local.key?('nodes')
   defaults.merge!(local['defaults']) if local.key?('defaults')
 end
