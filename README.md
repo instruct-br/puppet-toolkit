@@ -76,6 +76,10 @@ This choice helps us greatly reduce the risk of developing code that might fail 
 
 * Document our workflow
 * Document `local.yaml` usage
-* Rake task for starting development
 * Instructions on how to configure text editor, tests, etc.
 * Minimalistic Puppet module to configure Puppet Server
+* Rake task for installing puppet agent on developers system
+* Rake task for deploying tools (r10k, puppet-lint, rspec, etc)
+* Rake task that deploy puppetserver into the Puppet vm
+* Rake task to setup control-repo (links inside the puppet vm)
+* Rake task that call vagrant (in case we replace vagrant with AWS or DO)
