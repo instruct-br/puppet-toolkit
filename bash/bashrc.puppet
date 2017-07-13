@@ -29,14 +29,14 @@ function git_color ()
             if [[ "$STATUS" == *'Your branch is ahead'* ]]
             then
                 # yellow if need to push
-                echo -e '\033[0;33m' asdasd
+                echo -e '\033[0;33m'
             else
                 # else cyan
-                echo -e '\033[0;36m' asdasd
+                echo -e '\033[0;36m'
             fi
         else
             # red if need to commit
-            echo -e '\033[0;31m' adasd
+            echo -e '\033[0;31m'
         fi
     fi
 }
