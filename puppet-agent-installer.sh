@@ -70,9 +70,9 @@ detect_debian_8 ( ) {
 
   if egrep '^8\.[0-9]' /etc/debian_version &> /dev/null; then
     cd /tmp
-    wget http://apt.puppetlabs.com/puppetlabs-release-pc1-wheezy.deb
-    dpkg -i puppetlabs-release-pc1-wheezy.deb
-    rm puppetlabs-release-pc1-wheezy.deb
+    wget http://apt.puppetlabs.com/puppetlabs-release-pc1-jessie.deb
+    dpkg -i puppetlabs-release-pc1-jessie.deb
+    rm puppetlabs-release-pc1-jessie.deb
     apt-get update
     apt-get install "puppet-agent=${PUPPET_AGENT_VERSION}*"
   fi
