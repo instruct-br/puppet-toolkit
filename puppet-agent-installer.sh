@@ -79,6 +79,19 @@ detect_debian_8 ( ) {
 
 }
 
+detect_debian_9 ( ) {
+
+  if egrep '^9\.[0-9]' /etc/debian_version &> /dev/null; then
+    cd /tmp
+    wget http://apt.puppetlabs.com/puppetlabs-release-pc1-stretch.deb
+    dpkg -i puppetlabs-release-pc1-stretch.deb
+    rm puppetlabs-release-pc1-stretch.deb
+    apt-get update
+    apt-get install "puppet-agent=${PUPPET_AGENT_VERSION}*"
+  fi
+
+}
+
 detect_sles_12 ( ) {
 
   if egrep 'VERSION_ID="12' /etc/os-release &> /dev/null; then
@@ -113,5 +126,6 @@ detect_ubuntu_1604
 detect_ubuntu_1404
 detect_ubuntu_1204
 detect_debian_8
+detect_debian_9
 detect_sles_11
 detect_sles_12
