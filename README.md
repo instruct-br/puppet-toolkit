@@ -42,8 +42,12 @@ nodes:
     box: ubuntu/trusty64
   ubuntu-12.04:
     box: ubuntu/precise64
+  debian-9:
+    box: debian/stretch64
   debian-8:
     box: debian/jessie64
+  debian-7:
+    box: debian/whezzy64
   sles-11:
     box: elastic/sles-11-x86_64
   sles-12:
