@@ -36,6 +36,8 @@ nodes:
     box: centos/7
   centos-6:
     box: centos/6
+  centos-5:
+    box: gutocarvalho/centos5x64nocm
   ubuntu-16.04:
     box: ubuntu/xenial64
   ubuntu-14.04:
