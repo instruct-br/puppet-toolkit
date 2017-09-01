@@ -55,7 +55,6 @@ Vagrant.configure('2') do |config|
 
       n.vm.provider 'virtualbox' do |v|
         v.customize ['modifyvm', :id, '--ioapic', 'on']
-        v.customize ['modifyvm', :id, '--name', "#{node}.#{domain}"]
         v.memory = memory
         v.cpus = cpus
       end
