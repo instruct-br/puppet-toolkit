@@ -23,6 +23,7 @@ nodes:
     box: ubuntu/precise64
   debian-9:
     box: debian/stretch64
+    puppet_agent_version: '1.10.6'
   debian-8:
     box: debian/jessie64
   debian-7:

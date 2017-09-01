@@ -27,6 +27,7 @@ defaults:
   domain: 'dev'
   network_prefix: '172.22.0'
   synced_folder_type: 'nfs'
+  puppet_agent_version: '1.10.0'
 nodes:
   puppet:
     memory: 2048
@@ -44,6 +45,7 @@ nodes:
     box: ubuntu/precise64
   debian-9:
     box: debian/stretch64
+    puppet_agent_version: '1.10.6'
   debian-8:
     box: debian/jessie64
   debian-7:
