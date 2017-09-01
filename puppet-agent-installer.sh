@@ -135,15 +135,11 @@ detect_debian_9 ( ) {
 detect_sles_12 ( ) {
 
   if egrep 'VERSION_ID="12' /etc/os-release &> /dev/null; then
-    # Remove an inacessible remote repository
-    zypper removerepo sles12-dvd1
-    # Remove a repository with incorrect URL
-    zypper removerepo devel_tools_scm
-    # Enable GPG check for the Puppet repositories
-    zypper modifyrepo -g puppetlabs-pc1 puppetlabs-pc1-source
-    # Update Puppet metadata to ensure the latest packages
+    # Puppet repositories are already configured
+    # Do not enable GPG check on Puppet repositories. It will break unattended install
     zypper refresh puppetlabs-pc1
-   fi
+    zypper install --oldpackage --no-recommends --no-confirm "puppet-agent=${PUPPET_AGENT_VERSION}"
+  fi
 
 }
 
