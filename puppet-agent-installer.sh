@@ -24,6 +24,20 @@ detect_rhel_6 ( ) {
 
 }
 
+detect_rhel_5 ( ) {
+
+  if egrep ' 5\.' /etc/redhat-release &> /dev/null; then
+    echo 'nameserver 8.8.8.8' > /etc/resolv.conf
+    cd /tmp
+    curl -O http://yum.puppetlabs.com/RPM-GPG-KEY-puppet
+    rpm --import RPM-GPG-KEY-puppet
+    curl -O http://yum.puppetlabs.com/puppetlabs-release-pc1-el-5.noarch.rpm
+    yum install -y puppetlabs-release-pc1-el-5.noarch.rpm
+    yum install -y "puppet-agent-${PUPPET_AGENT_VERSION}"
+  fi
+
+}
+
 detect_ubuntu_1604 ( ) {
 
   if egrep 'DISTRIB_RELEASE=16.04' /etc/lsb-release &> /dev/null; then
@@ -146,6 +160,7 @@ detect_sles_11 ( ) {
 
 }
 
+detect_rhel_5
 detect_rhel_6
 detect_rhel_7
 detect_ubuntu_1604
