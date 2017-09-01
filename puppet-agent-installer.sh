@@ -66,6 +66,18 @@ detect_ubuntu_1204 ( ) {
 
 }
 
+detect_debian_6 ( ) {
+
+  if egrep '^6\.[0-9]' /etc/debian_version &> /dev/null; then
+    cd /tmp
+    wget http://apt.puppetlabs.com/puppetlabs-release-pc1-squeeze.deb
+    dpkg -i puppetlabs-release-pc1-squeeze.deb
+    rm puppetlabs-release-pc1-squeeze.deb
+    apt-get update
+    apt-get install "puppet-agent=${PUPPET_AGENT_VERSION}*"
+  fi
+
+}
 
 detect_debian_7 ( ) {
 
@@ -139,6 +151,7 @@ detect_rhel_7
 detect_ubuntu_1604
 detect_ubuntu_1404
 detect_ubuntu_1204
+detect_debian_6
 detect_debian_7
 detect_debian_8
 detect_debian_9

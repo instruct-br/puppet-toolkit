@@ -27,6 +27,9 @@ nodes:
     box: debian/jessie64
   debian-7:
     box: debian/whezzy64
+  debian-6:
+    box: gutocarvalho/debian6x64nocm
+    puppet_agent_version: '1.4.1' # Latest release
   sles-11:
     box: elastic/sles-11-x86_64
   sles-12:
