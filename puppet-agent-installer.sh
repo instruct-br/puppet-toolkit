@@ -148,9 +148,9 @@ detect_sles_11 ( ) {
   if egrep 'VERSION_ID="11' /etc/os-release &> /dev/null; then
     # Remove old Puppet gems
     gem uninstall --all --executables facter hiera puppet
-    zypper addrepo http://yum.puppetlabs.com/sles/11/PC1/x86_64/ puppetlabs-pc1
+    zypper install --no-confirm http://yum.puppetlabs.com/puppetlabs-release-pc1-sles-11.noarch.rpm
+    # Disable GPG check on Puppet repositories or it will break unattended install
     zypper modifyrepo -G puppetlabs-pc1
-
     zypper install --oldpackage --no-recommends --no-confirm "puppet-agent=${PUPPET_AGENT_VERSION}"
   fi
 
