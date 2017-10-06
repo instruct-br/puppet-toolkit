@@ -51,7 +51,7 @@ nodes:
   debian-8:
     box: debian/jessie64
   debian-7:
-    box: debian/whezzy64
+    box: debian/wheezy64
   debian-6:
     box: gutocarvalho/debian6x64nocm
     puppet_agent_version: '1.4.1' # Latest release
