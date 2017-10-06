@@ -134,7 +134,7 @@ detect_debian_9 ( ) {
 
 detect_sles_12 ( ) {
 
-  if grep -E 'VERSION_ID="12' /etc/os-release &> /dev/null; then
+  if grep -E 'VERSION="12-' /etc/os-release &> /dev/null; then
     # Puppet repositories are already configured
     # Do not enable GPG check on Puppet repositories. It will break unattended install
     zypper refresh puppetlabs-pc1
