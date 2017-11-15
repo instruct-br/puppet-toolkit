@@ -4,8 +4,8 @@ sudo: required
 rvm:
   - 2.2
 before_script:
-  - "sudo powershell -Command 'Install-Module -Name PSScriptAnalyzer -SkipPublisherCheck -Force'"
-  - "sudo powershell -Command 'Install-Module -Name Pester -SkipPublisherCheck -Force'"
+  - "sudo pwsh -Command 'Install-Module -Name PSScriptAnalyzer -SkipPublisherCheck -Force'"
+  - "sudo pwsh -Command 'Install-Module -Name Pester -SkipPublisherCheck -Force'"
 script:
   - "bundle exec rake reek"
   - "bundle exec rake rubocop"
@@ -19,5 +19,6 @@ addons:
       - sourceline: "deb [arch=amd64] https://packages.microsoft.com/ubuntu/14.04/prod trusty main"
         key_url: "https://packages.microsoft.com/keys/microsoft.asc"
     packages:
+      - libunwind8=1.1-2.2ubuntu3
       - shellcheck
-      - powershell=6.0.0-beta.2-1ubuntu1.14.04.1
+      - powershell
