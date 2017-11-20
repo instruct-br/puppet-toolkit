@@ -60,6 +60,7 @@ Vagrant.configure('2') do |config|
       end
 
       n.vm.box = data['box']
+      n.vm.box_url = data['box_url'] if data.key?('box_url')
       n.vm.network :private_network, ip: "#{network_prefix}.#{index + 100}"
 
       if data.key?('type') && data['type'] == 'windows'

@@ -47,3 +47,9 @@ nodes:
     cpus: 2
     type: windows
     box: opentable/win-2008r2-standard-amd64-nocm
+  oracle-7:
+    box: oracle/7
+    box_url: http://yum.oracle.com/boxes/oraclelinux/ol74/ol74.box
+  oracle-6:
+    box: oracle/6
+    box_url: http://yum.oracle.com/boxes/oraclelinux/ol69/ol69.box
