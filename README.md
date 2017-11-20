@@ -19,7 +19,7 @@ The virtual machine will have the puppet-agent package installed and ready to go
 
 All configuration is loaded from `environment.yaml` file. There are two main keys: `defaults` and `nodes`.
 
-```
+```yaml
 ---
 defaults:
   memory: 1024
@@ -69,6 +69,12 @@ nodes:
     cpus: 2
     type: windows
     box: opentable/win-2008r2-standard-amd64-nocm
+  oracle-7:
+    box: oracle/7
+    box_url: http://yum.oracle.com/boxes/oraclelinux/ol74/ol74.box
+  oracle-6:
+    box: oracle/6
+    box_url: http://yum.oracle.com/boxes/oraclelinux/ol69/ol69.box
 ```
 
 The `defaults` hash has keys that configure how VirtualBox and Vagrant will work and also values that configure the VMs specified in the `nodes` hash.

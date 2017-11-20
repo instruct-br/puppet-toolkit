@@ -6,7 +6,7 @@ set -o pipefail
 
 PUPPET_AGENT_VERSION=$1
 
-detect_rhel_7 ( ) {
+detect_rhel_or_oracle_7 ( ) {
 
   if grep -E ' 7\.' /etc/redhat-release &> /dev/null; then
     yum install -y https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
@@ -15,7 +15,7 @@ detect_rhel_7 ( ) {
 
 }
 
-detect_rhel_6 ( ) {
+detect_rhel_or_oracle_6 ( ) {
 
   if grep -E ' 6\.' /etc/redhat-release &> /dev/null; then
     yum install -y https://yum.puppetlabs.com/puppetlabs-release-pc1-el-6.noarch.rpm
@@ -157,8 +157,8 @@ detect_sles_11 ( ) {
 }
 
 detect_rhel_5
-detect_rhel_6
-detect_rhel_7
+detect_rhel_or_oracle_6
+detect_rhel_or_oracle_7
 detect_ubuntu_1604
 detect_ubuntu_1404
 detect_ubuntu_1204
