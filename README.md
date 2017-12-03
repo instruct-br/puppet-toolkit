@@ -75,6 +75,8 @@ nodes:
   oracle-6:
     box: oracle/6
     box_url: http://yum.oracle.com/boxes/oraclelinux/ol69/ol69.box
+  oracle-5:
+    box: gutocarvalho/oracle5x64nocm
 ```
 
 The `defaults` hash has keys that configure how VirtualBox and Vagrant will work and also values that configure the VMs specified in the `nodes` hash.

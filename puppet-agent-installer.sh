@@ -24,16 +24,17 @@ detect_rhel_or_oracle_6 ( ) {
 
 }
 
-detect_rhel_5 ( ) {
+detect_rhel_or_oracle_5 ( ) {
 
   if grep -E ' 5\.' /etc/redhat-release &> /dev/null; then
-    echo 'nameserver 8.8.8.8' > /etc/resolv.conf
     cd /tmp
-    curl -O http://yum.puppetlabs.com/RPM-GPG-KEY-puppet
-    rpm --import RPM-GPG-KEY-puppet
-    curl -O http://yum.puppetlabs.com/puppetlabs-release-pc1-el-5.noarch.rpm
-    yum install -y puppetlabs-release-pc1-el-5.noarch.rpm
-    yum install -y "puppet-agent-${PUPPET_AGENT_VERSION}"
+    curl -s -O http://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
+      && rpm --import RPM-GPG-KEY-puppet \
+      && rm -f RPM-GPG-KEY-puppet \
+      && curl -s -O http://yum.puppetlabs.com/puppetlabs-release-pc1-el-5.noarch.rpm \
+      && yum install -y puppetlabs-release-pc1-el-5.noarch.rpm \
+      && rm -f puppetlabs-release-pc1-el-5.noarch.rpm \
+      && yum install -y "puppet-agent-${PUPPET_AGENT_VERSION}"
   fi
 
 }
@@ -156,7 +157,7 @@ detect_sles_11 ( ) {
 
 }
 
-detect_rhel_5
+detect_rhel_or_oracle_5
 detect_rhel_or_oracle_6
 detect_rhel_or_oracle_7
 detect_ubuntu_1604
