@@ -53,6 +53,12 @@ Vagrant.configure('2') do |config|
                defaults['cpus']
              end
 
+      network_address = if data.key?('network_suffix')
+              "#{network_prefix}.#{data['network_suffix']}"
+            else
+              "#{network_prefix}.#{index + 100}"
+            end
+
       n.vm.provider 'virtualbox' do |v|
         v.customize ['modifyvm', :id, '--ioapic', 'on']
         v.memory = memory
@@ -61,7 +67,7 @@ Vagrant.configure('2') do |config|
 
       n.vm.box = data['box']
       n.vm.box_url = data['box_url'] if data.key?('box_url')
-      n.vm.network :private_network, ip: "#{network_prefix}.#{index + 100}"
+      n.vm.network :private_network, ip: "#{network_address}"
 
       if data.key?('type') && data['type'] == 'windows'
         n.vm.hostname = node
