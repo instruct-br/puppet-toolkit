@@ -85,6 +85,11 @@ Vagrant.configure('2') do |config|
           s.path = 'puppet-agent-installer.sh'
           s.args = puppet_agent_version
         end
+        if File.exist?("#{vagrant_root}/scripts/#{node}.sh")
+          n.vm.provision 'shell' do |s|
+            s.path = "#{vagrant_root}/scripts/#{node}.sh"
+          end
+        end
       end
     end
   end
