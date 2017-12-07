@@ -1,0 +1,33 @@
+#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
+##############################################
+# This script configs the Puppet Server localy
+#
+# Change this variables if you want it to
+# provision automatically your server
+
+# The name of your controlrepo project
+CONTROL_REPO=''
+
+# The name of your local Puppet Server role
+ROLE_NAME=''
+##############################################
+
+echo "===>>> Preparing the Puppet Server environment ..."
+cd /etc/puppetlabs/code/environments/
+rm -rf production/
+ln -s /vagrant/$CONTROL_REPO production
+
+echo "===>>> Provisioning Puppet Server ..."
+puppet apply -e "include $ROLE_NAME"
+
+echo "===>>> Applying Puppet agent ..."
+puppet agent -t || test $? -eq 2
+
+echo "===>>> Puppet Server ready to use!"
+echo "===>>> "
+echo "===>>> "
+echo "===>>> Enjoy!"
+echo "===>>> "

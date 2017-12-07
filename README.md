@@ -15,6 +15,16 @@ It is very opinionated and based on our workflow, although it should be very use
 
 The virtual machine will have the puppet-agent package installed and ready to go.
 
+## 10-min Puppet Server start
+
+1. Make sure VirtualBox and Vagrant are installed
+1. Clone the project repository
+1. Edit `environment.yaml` to your needs if needed
+1. Copy `scripts/puppet.sh.sample` to `scripts/puppet.sh` and edit it to config the controlrepo name and Puppet Server role
+1. Run `vagrant up puppet`
+
+The virtual machine will have the Puppet Server installed and configured, ready to configure the clients VMs.
+
 ## Configuration
 
 All configuration is loaded from `environment.yaml` file. There are two main keys: `defaults` and `nodes`.
