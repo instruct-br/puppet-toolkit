@@ -21,7 +21,7 @@ else
 fi
 
 if [[ $? -ne 0 ]]; then
-  syntax_errors=$((syntax_errors + 1))
+    syntax_errors=$((syntax_errors + 1))
     $error_msg_filter -e "s/^/$(tput setaf 1)/" -e "s/$/$(tput sgr0)/" < "$error_msg"
     echo -e "$(tput setaf 1)Error: puppet syntax error in $manifest_name (see above)$(tput sgr0)"
 fi

@@ -26,12 +26,12 @@ $ERRORS_ONLY || echo -e "$(tput setaf 6)Checking puppet style guide compliance f
 
 # Set the puppet lint option to fail on warnings if true.
 if [ "${PUPPET_LINT_FAIL_ON_WARNINGS}" = true ]; then
-  puppet_lint_cmd="puppet-lint --fail-on-warnings --with-filename --relative"
+    puppet_lint_cmd="puppet-lint --fail-on-warnings --with-filename --relative"
 elif [ "${PUPPET_LINT_FAIL_ON_WARNINGS}" = false ]; then
-  puppet_lint_cmd="puppet-lint --with-filename --relative"
+    puppet_lint_cmd="puppet-lint --with-filename --relative"
 else
-  echo "Configuration Option PUPPET_LINT_FAIL_ON_WARNINGS not set to a boolean value"
-  exit 1
+    echo "Configuration Option PUPPET_LINT_FAIL_ON_WARNINGS not set to a boolean value"
+    exit 1
 fi
 
 # If a file named .puppet-lint.rc exists at the base of the repo then use it to
@@ -55,12 +55,12 @@ fi
 $puppet_lint_cmd "$2" 2>"$error_msg" >&2
 RC=$?
 if [[ $RC -ne 0 ]]; then
-  syntax_errors=$(wc -l "$error_msg" | awk '{print $1}')
+    syntax_errors=$(wc -l "$error_msg" | awk '{print $1}')
     $error_msg_filter -e "s/^/$(tput setaf 1)/" -e "s/$/$(tput sgr0)/" < "$error_msg"
     echo -e "$(tput setaf 1)Error: styleguide violation in $manifest_name (see above)$(tput sgr0)"
 elif [[ -s $error_msg ]]; then
-  $error_msg_filter -e "s/^/$(tput setaf 3)/" -e "s/$/$(tput sgr0)/" < "$error_msg"
-  echo -e "$(tput setaf 1)Warning: styleguide violation in $manifest_name (see above)$(tput sgr0)"
+    $error_msg_filter -e "s/^/$(tput setaf 3)/" -e "s/$/$(tput sgr0)/" < "$error_msg"
+    echo -e "$(tput setaf 1)Warning: styleguide violation in $manifest_name (see above)$(tput sgr0)"
 fi
 rm -f "$error_msg"
 
@@ -71,7 +71,7 @@ if [[ $syntax_errors -ne 0 ]]; then
         echo -e "Error: $syntax_errors styleguide violation(s) found. Commit will be aborted.
 Please follow the puppet style guide outlined at:
 http://docs.puppetlabs.com/guides/style_guide.html" | sed -e "s/^/$(tput setaf 1)/" -e "s/$/$(tput sgr0)/"
-    exit 1
+        exit 1
     fi
 fi
 
