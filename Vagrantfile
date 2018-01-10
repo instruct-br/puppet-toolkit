@@ -73,6 +73,7 @@ Vagrant.configure('2') do |config|
         n.vm.hostname = node
         n.vm.communicator = 'winrm'
         n.vm.synced_folder '.', '/vagrant', disabled: true
+        n.vm.network 'forwarded_port', host: 3389, guest: 3389, auto_correct: true
         n.vm.provision 'shell' do |s|
           s.path = 'puppet-agent-installer.ps1'
           s.args = ['-PuppetVersion', puppet_agent_version]
