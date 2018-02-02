@@ -6,30 +6,35 @@ Source: https://raw.githubusercontent.com/hashicorp/puppet-bootstrap/master/wind
     Installs Puppet on this machine.
 
 .DESCRIPTION
-    Downloads and installs the PuppetLabs Puppet MSI package.
+    Downloads and installs the official Puppet MSI package.
 
     This script requires administrative privileges.
 
     You can run this script from an old-style cmd.exe prompt using the
     following:
 
-      powershell.exe -ExecutionPolicy Unrestricted -NoLogo -NoProfile -Command "& '.\windows.ps1'"
+      powershell.exe -ExecutionPolicy Unrestricted -NoLogo -NoProfile -Command "& '.\puppet-agent-installer.ps1'"
 
 .PARAMETER MsiUrl
     This is the URL to the Puppet MSI file you want to install. This defaults
-    to a version from PuppetLabs.
+    to a version from Puppet.
 
 .PARAMETER PuppetVersion
     This is the version of Puppet that you want to install. If you pass this it will override the version in the MsiUrl.
     This defaults to $null.
 #>
 param(
-    [string]$MsiUrl = "https://downloads.puppetlabs.com/windows/puppet-agent-x64-latest.msi",
+    [string]$MsiUrl = "https://downloads.puppet.com/windows/puppet5/puppet-agent-x64-latest.msi",
     [string]$PuppetVersion = $null
 )
 
 if ($PuppetVersion) {
-    $MsiUrl = "https://downloads.puppetlabs.com/windows/puppet-agent-$($PuppetVersion)-x64.msi"
+    $isPuppetFive = ($PuppetVersion[0] -eq '5')
+    if ($isPuppetFive) {
+        $MsiUrl = "https://downloads.puppet.com/windows/puppet5/puppet-agent-$($PuppetVersion)-x64.msi"
+    } else {
+        $MsiUrl = "https://downloads.puppet.com/windows/puppet-agent-$($PuppetVersion)-x64.msi"
+    }
     Write-Output "Puppet version $PuppetVersion specified, updated MsiUrl to `"$MsiUrl`""
 }
 
