@@ -52,6 +52,11 @@ task :create_control_repo_environments do
   end
 end
 
+desc 'Deploy environment'
+task :deploy_environment do
+  # TODO: implement r10k call
+end
+
 desc 'Setup Puppet Development Kit'
 task :pdk do
   # detect OS
