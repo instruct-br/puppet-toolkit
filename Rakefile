@@ -6,6 +6,7 @@ require 'tmpdir'
 require 'open-uri'
 require 'zip'
 require 'fileutils'
+require 'open3'
 
 YamlLint::RakeTask.new do |t|
   t.paths = %w[
@@ -14,6 +15,47 @@ YamlLint::RakeTask.new do |t|
     .rubocop.yml
     .travis.yml
   ]
+end
+
+desc 'Setup Control Repo'
+task setup_control_repo: %i[clone_control_repo create_control_repo_environments]
+
+desc 'Clone Control Repo'
+task :clone_control_repo do
+  # TODO: Optionally fetch all remote branches
+  abort('The environment variable CONTROL_REPO_URL must exist') unless ENV.key?('CONTROL_REPO_URL')
+
+  _stdin, _stdout, stderr, wait_thread = Open3.popen3("git clone #{ENV['CONTROL_REPO_URL']} control-repo")
+  exit_status = wait_thread.value
+
+  abort("Failed to clone control-repo: #{stderr.read}") unless exit_status.success?
+end
+
+desc 'Create Control Repo Environments'
+task :create_control_repo_environments do
+  # TODO: create a function that returns the VM state
+  system('vagrant up puppet')
+  # TODO: optionally map remote branches to local branches
+  _stdin, stdout, stderr, wait_thread = Open3.popen3('git branch --no-color --list', chdir: 'control-repo')
+  exit_status = wait_thread.value
+
+  abort("Failed to detect control-repo branches: '#{stderr.read}") unless exit_status.success?
+
+  stdout.readlines.each do |line|
+    branch_name_match = line.strip.match('^[ *]{2}([\w-]+)$')
+    if branch_name_match && branch_name_match.size == 2
+      # TODO: create function that creates the links
+      system("vagrant ssh puppet --command \"sudo ln -s /vagrant/control-repo /etc/puppetlabs/code/environments/#{branch_name_match[1]}\"")
+    else
+      abort("Failed to detect control-repo branches: '#{line.strip}' is not a valid branch name")
+    end
+  end
+end
+
+desc 'Setup Puppet Development Kit'
+task :pdk do
+  # detect OS
+  # download and install
 end
 
 desc 'Reek code smells'
