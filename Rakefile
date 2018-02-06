@@ -8,6 +8,48 @@ require 'zip'
 require 'fileutils'
 require 'open3'
 
+def vm_status(vm_name)
+  _stdin, stdout, _stderr, wait_thread = Open3.popen3("vagrant --machine-readable status #{vm_name}")
+
+  exit_status = wait_thread.value
+
+  abort("Error detecting VM '#{vm_name}' status: #{stdout.read}") unless exit_status.success?
+
+  stdout.readlines.each do |line|
+    _timestamp, _target, type, data = line.strip.split(',')
+    return data if type == 'state'
+  end
+
+  abort("Error detecting VM '#{vm_name}' status: #{stdout.read}")
+end
+
+def vm_running?(vm_name)
+  status = vm_status(vm_name)
+  status == 'running'
+end
+
+def vm_up(vm_name)
+  status = vm_status(vm_name)
+
+  command = { 'poweroff' => 'up', 'saved' => 'resume' }
+
+  puts "Starting VM '#{vm_name}' ..."
+  # FIXME: vagrant or a plugin could prompt the user for input. Need to handle it
+  _stdin, stdout, _stderr, wait_thread = Open3.popen3("vagrant #{command[status]} #{vm_name}")
+  exit_status = wait_thread.value
+
+  abort("Error starting VM '#{vm_name}': #{stdout.read}") unless exit_status.success?
+end
+
+def vm_command(vm_name, command)
+  _stdin, stdout, stderr, wait_thread = Open3.popen3("vagrant ssh #{vm_name} --command \"sudo #{command}\"")
+  exit_status = wait_thread.value
+
+  unless exit_status.success?
+    abort("Error running command on VM '#{vm_name}': #{stdout.read}\n#{stderr.read}")
+  end
+end
+
 YamlLint::RakeTask.new do |t|
   t.paths = %w[
     environment.yaml
@@ -17,37 +59,40 @@ YamlLint::RakeTask.new do |t|
   ]
 end
 
-desc 'Setup Control Repo'
+desc 'Setup control repo'
 task setup_control_repo: %i[clone_control_repo create_control_repo_environments]
 
-desc 'Clone Control Repo'
+desc 'Clone control repo'
 task :clone_control_repo do
-  # TODO: Optionally fetch all remote branches
   abort('The environment variable CONTROL_REPO_URL must exist') unless ENV.key?('CONTROL_REPO_URL')
 
-  _stdin, _stdout, stderr, wait_thread = Open3.popen3("git clone #{ENV['CONTROL_REPO_URL']} control-repo")
+  control_repo = ENV['CONTROL_REPO_URL']
+
+  puts "Cloning control repo '#{control_repo}' ..."
+  _stdin, _stdout, stderr, wait_thread = Open3.popen3("git clone --mirror -b production #{control_repo} control-repo")
   exit_status = wait_thread.value
 
-  abort("Failed to clone control-repo: #{stderr.read}") unless exit_status.success?
+  abort("Failed to clone control repo: #{stderr.read}") unless exit_status.success?
 end
 
 desc 'Create Control Repo Environments'
 task :create_control_repo_environments do
-  # TODO: create a function that returns the VM state
-  system('vagrant up puppet')
-  # TODO: optionally map remote branches to local branches
+  vm_up('puppet') unless vm_running?('puppet')
+
   _stdin, stdout, stderr, wait_thread = Open3.popen3('git branch --no-color --list', chdir: 'control-repo')
   exit_status = wait_thread.value
 
   abort("Failed to detect control-repo branches: '#{stderr.read}") unless exit_status.success?
 
   stdout.readlines.each do |line|
-    branch_name_match = line.strip.match('^[ *]{2}([\w-]+)$')
-    if branch_name_match && branch_name_match.size == 2
+    branch_name_match = line.strip.match(/^(\* )?(?<branch>[\w-]+)$/)
+    if branch_name_match
+      environment = branch_name_match[:branch]
       # TODO: create function that creates the links
-      system("vagrant ssh puppet --command \"sudo ln -s /vagrant/control-repo /etc/puppetlabs/code/environments/#{branch_name_match[1]}\"")
+      puts "Creating symbolic link for environment '#{environment}' ..."
+      vm_command('puppet', "ln -s /vagrant/control-repo /etc/puppetlabs/code/environments/#{environment}")
     else
-      abort("Failed to detect control-repo branches: '#{line.strip}' is not a valid branch name")
+      abort("Failed to detect control-repo branches: '#{line}' is not a valid branch name")
     end
   end
 end
