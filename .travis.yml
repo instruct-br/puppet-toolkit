@@ -2,7 +2,7 @@ language: ruby
 dist: trusty
 sudo: required
 rvm:
-  - 2.2
+  - 2.4
 before_script:
   - "curl -o /tmp/shellcheck-latest.linux.x86_64.tar.xz https://storage.googleapis.com/shellcheck/shellcheck-latest.linux.x86_64.tar.xz"
   - "sudo tar -xf /tmp/shellcheck-latest.linux.x86_64.tar.xz --strip-components 1 -C /usr/bin/ shellcheck-latest/shellcheck"

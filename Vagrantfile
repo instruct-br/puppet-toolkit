@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'yaml'
 
 Vagrant.require_version '>= 1.9.2'
@@ -37,7 +39,7 @@ Vagrant.configure('2') do |config|
                                defaults['puppet_agent_version']
                              end
 
-      unless puppet_agent_version =~ /\d\.\d{1,2}\.\d{1,2}/
+      unless puppet_agent_version.match?(/\d\.\d{1,2}\.\d{1,2}/)
         raise "Invalid Puppet Agent version: #{puppet_agent_version}"
       end
 
