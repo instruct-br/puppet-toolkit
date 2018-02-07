@@ -24,7 +24,7 @@ def run_vagrant(arguments)
 
   exit_status = wait_thread.value
 
-  abort("Error running Vagrant command for VM '#{vm_name}': #{stdout.read}") unless exit_status.success?
+  abort("Error running Vagrant command: #{stdout.read}") unless exit_status.success?
 
   stdout
 end
@@ -77,7 +77,22 @@ task :clone_control_repo do
   control_repo = ENV['CONTROL_REPO_URL']
 
   puts "Cloning control repo '#{control_repo}' ..."
-  run_git("clone --mirror -b production #{control_repo} control-repo")
+  run_git("clone #{control_repo} control-repo")
+
+  run_git('fetch --all', chdir: 'control-repo')
+
+  output = run_git('branch --no-color --list', chdir: 'control-repo')
+  default_branch = output.read.strip.gsub('* ', '')
+
+  branches = run_git('branch --no-color --list -r', chdir: 'control-repo')
+
+  branches.readlines.each do |branch|
+    branch_match = branch.strip.match(/^origin\/(?<name>[\w-]+)$/)
+
+    next if !branch_match && (branch_match[:name] == default_branch)
+
+    run_git("branch #{branch_match[:name]} origin/#{branch_match[:name]}", chdir: 'control-repo')
+  end
 end
 
 desc 'Create Control Repo Environments'
