@@ -54,10 +54,10 @@ Vagrant.configure('2') do |config|
              end
 
       network_address = if data.key?('network_suffix')
-              "#{network_prefix}.#{data['network_suffix']}"
-            else
-              "#{network_prefix}.#{index + 100}"
-            end
+                          "#{network_prefix}.#{data['network_suffix']}"
+                        else
+                          "#{network_prefix}.#{index + 100}"
+                        end
 
       n.vm.provider 'virtualbox' do |v|
         v.customize ['modifyvm', :id, '--ioapic', 'on']
@@ -67,14 +67,14 @@ Vagrant.configure('2') do |config|
 
       n.vm.box = data['box']
       n.vm.box_url = data['box_url'] if data.key?('box_url')
-      n.vm.network :private_network, ip: "#{network_address}"
+      n.vm.network :private_network, ip: network_address
 
       if data.key?('type') && data['type'] == 'windows'
         n.vm.hostname = node
         n.vm.communicator = 'winrm'
         n.vm.synced_folder '.', '/vagrant', disabled: true
         rdp_port = "338#{index + 10}"
-        n.vm.network 'forwarded_port', host: "#{rdp_port}", guest: 3389, auto_correct: true, id: 'rdp'
+        n.vm.network 'forwarded_port', host: rdp_port, guest: 3389, auto_correct: true, id: 'rdp'
         n.vm.provision 'shell' do |s|
           s.path = 'puppet-agent-installer.ps1'
           s.args = ['-PuppetVersion', puppet_agent_version]
