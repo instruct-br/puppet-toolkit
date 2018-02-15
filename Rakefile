@@ -8,6 +8,58 @@ require 'tmpdir'
 require 'open-uri'
 require 'zip'
 require 'fileutils'
+require 'open3'
+
+def run_git(arguments, popen_options = {})
+  _stdin, stdout, stderr, wait_thread = Open3.popen3("git #{arguments}", popen_options)
+
+  exit_status = wait_thread.value
+
+  abort("Failed to run git: #{stderr.read}") unless exit_status.success?
+
+  stdout
+end
+
+def run_vagrant(arguments)
+  # FIXME: vagrant or a plugin could prompt the user for input. Need to handle it
+  _stdin, stdout, stderr, wait_thread = Open3.popen3("vagrant --machine-readable #{arguments}")
+
+  # FIXME: print output as it comes
+  exit_status = wait_thread.value
+
+  abort("Error running Vagrant command: #{stdout.read} #{stderr.read}") unless exit_status.success?
+
+  stdout
+end
+
+def vm_status(vm_name)
+  output = run_vagrant("status #{vm_name}")
+
+  output.readlines.each do |line|
+    _timestamp, _target, type, data = line.strip.split(',')
+    return data if type == 'state'
+  end
+
+  abort("Error detecting VM '#{vm_name}' status: #{stdout.read}")
+end
+
+def vm_running?(vm_name)
+  status = vm_status(vm_name)
+  status == 'running'
+end
+
+def vm_up(vm_name)
+  status = vm_status(vm_name)
+
+  command = { 'poweroff' => 'up', 'saved' => 'resume' }
+
+  puts "Starting VM '#{vm_name}' ..."
+  run_vagrant("#{command[status]} #{vm_name}")
+end
+
+def vm_command(vm_name, command)
+  run_vagrant("ssh #{vm_name} --command \"sudo #{command}\"")
+end
 
 YamlLint::RakeTask.new do |t|
   t.paths = %w[
@@ -16,6 +68,92 @@ YamlLint::RakeTask.new do |t|
     .rubocop.yml
     .travis.yml
   ]
+end
+
+desc 'Setup control repo'
+task setup_control_repo: %i[clone_control_repo create_control_repo_environments]
+
+desc 'Clone control repo'
+task :clone_control_repo do
+  abort('The environment variable CONTROL_REPO_URL must exist') unless ENV.key?('CONTROL_REPO_URL')
+
+  control_repo = ENV['CONTROL_REPO_URL']
+
+  puts "Cloning control repo '#{control_repo}' ..."
+  run_git("clone #{control_repo} control-repo")
+
+  run_git('fetch --all', chdir: 'control-repo')
+
+  output = run_git('branch --no-color --list', chdir: 'control-repo')
+  default_branch = output.read.strip.gsub('* ', '')
+
+  branches = run_git('branch --no-color --list -r', chdir: 'control-repo')
+
+  branches.readlines.each do |branch|
+    branch_match = branch.strip.match(/^origin\/(?<name>[\w-]+)$/)
+
+    next if !branch_match && (branch_match[:name] == default_branch)
+
+    run_git("branch #{branch_match[:name]} origin/#{branch_match[:name]}", chdir: 'control-repo')
+  end
+end
+
+desc 'Create Control Repo Environments'
+task :create_control_repo_environments do
+  vm_name = ENV.key?('VM_NAME') ? ENV['VM_NAME'] : 'puppet'
+
+  vm_up(vm_name) unless vm_running?(vm_name)
+
+  puts 'Cleaning environments directory ...'
+  vm_command(vm_name, 'rm -rf /etc/puppetlabs/code/environments/*')
+
+  output = run_git('branch --no-color --list', chdir: 'control-repo')
+
+  output.readlines.each do |line|
+    branch_name_match = line.strip.match(/^(\* )?(?<branch>[\w-]+)$/)
+    if branch_name_match
+      environment = branch_name_match[:branch]
+      puts "Creating symbolic link for environment '#{environment}' ..."
+      vm_command(vm_name, "ln -s /vagrant/control-repo /etc/puppetlabs/code/environments/#{environment}")
+    else
+      abort("Failed to detect control-repo branches: '#{line}' is not a valid branch name")
+    end
+  end
+end
+
+desc 'Create environment'
+task :create_environment do
+  abort('The environment variable ENVIRONMENT_NAME must exist') unless ENV.key?('ENVIRONMENT_NAME')
+
+  run_git("branch #{ENV['ENVIRONMENT_NAME']} production", chdir: 'control-repo')
+end
+
+desc 'Deploy environment'
+task :deploy_environment do
+  abort('The environment variable ENVIRONMENT_NAME must exist') unless ENV.key?('ENVIRONMENT_NAME')
+
+  vm_name = ENV.key?('VM_NAME') ? ENV['VM_NAME'] : 'puppet'
+  environment = ENV['ENVIRONMENT_NAME']
+
+  vm_up(vm_name) unless vm_running?(vm_name)
+
+  run_git("checkout #{environment}", chdir: 'control-repo')
+
+  puts "Creating symbolic link for environment '#{environment}' ..."
+  vm_command(vm_name, "ln -s /vagrant/control-repo /etc/puppetlabs/code/environments/#{environment}")
+
+  puts 'Running r10k ...'
+  _stdin, stdout, stderr, wait_thread = Open3.popen3('r10k puppetfile install -v debug', chdir: 'control-repo')
+
+  exit_status = wait_thread.value
+
+  abort("Error running r10k command: #{stdout.read} #{stderr.read}") unless exit_status.success?
+end
+
+desc 'Setup Puppet Development Kit'
+task :pdk do
+  # detect OS
+  # download and install
 end
 
 desc 'Reek code smells'

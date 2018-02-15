@@ -11,3 +11,6 @@ Metrics/BlockLength:
 
 Metrics/LineLength:
   Max: 110
+
+Style/RegexpLiteral:
+  AllowInnerSlashes: true
