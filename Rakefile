@@ -9,41 +9,59 @@ require 'open-uri'
 require 'zip'
 require 'fileutils'
 
-YamlLint::RakeTask.new do |t|
-  t.paths = %w[
-    environment.yaml
-    local.dist.yaml
-    .rubocop.yml
-    .travis.yml
-  ]
-end
+desc 'Validate all code'
+task validate: ['validate:ruby', 'validate:installers', 'validate:yaml_files']
 
-desc 'Reek code smells'
-task :reek do
-  configuration = Reek::Configuration::AppConfiguration.from_path Pathname.new('.config.reek')
-  reporter = Reek::Report::TextReport.new
-  vagrantfile_examiner = Reek::Examiner.new(File.open('Vagrantfile').read, configuration: configuration)
-  rakefile_examiner = Reek::Examiner.new(File.open('Rakefile').read, configuration: configuration)
-  reporter.add_examiner vagrantfile_examiner
-  reporter.add_examiner rakefile_examiner
-  if reporter.smells?
-    reporter.show
-    raise 'Smell violations found using Reek'
+namespace :validate do
+  desc 'Validate Ruby Code'
+  task ruby: ['validate:ruby:rubocop', 'validate:ruby:reek']
+
+  YamlLint::RakeTask.new 'yaml_files' do |t|
+    t.paths = %w[
+      environment.yaml
+      local.dist.yaml
+      .rubocop.yml
+      .travis.yml
+    ]
   end
-end
 
-RuboCop::RakeTask.new
+  namespace :ruby do
+    RuboCop::RakeTask.new
 
-desc 'Validate shell scripts'
-task :shellcheck do
-  system('shellcheck -s bash puppet-agent-installer.sh bash/bashrc.puppet')
-  raise 'Violations found using ShellCheck' unless $CHILD_STATUS.success?
-end
+    desc 'Reek code smells'
+    task :reek do
+      puts 'Running Reek do detect code smells ...'
+      configuration = Reek::Configuration::AppConfiguration.from_path Pathname.new('.config.reek')
+      reporter = Reek::Report::TextReport.new
+      vagrantfile_examiner = Reek::Examiner.new(File.open('Vagrantfile').read, configuration: configuration)
+      rakefile_examiner = Reek::Examiner.new(File.open('Rakefile').read, configuration: configuration)
+      reporter.add_examiner vagrantfile_examiner
+      reporter.add_examiner rakefile_examiner
+      if reporter.smells?
+        reporter.show
+        raise 'Smell violations found using Reek'
+      end
+    end
+  end
 
-desc 'Validate powershell script installer'
-task :powershellcheck do
-  system("pwsh -Command 'Invoke-Pester -EnableExit -Script ./puppet-agent-installer.tests.ps1'")
-  raise 'Violations found using Pester and PSAnalyzer' unless $CHILD_STATUS.success?
+  desc 'Validate Puppet installers'
+  task installers: ['validate:installers:shellscript', 'validate:installers:powershell']
+
+  namespace :installers do
+    desc 'Validate Shell Script installer'
+    task :shellscript do
+      puts 'Running shellcheck ...'
+      system('shellcheck -s bash puppet-agent-installer.sh bash/bashrc.puppet')
+      raise 'Violations found using ShellCheck' unless $CHILD_STATUS.success?
+    end
+
+    desc 'Validate PowerShell installer'
+    task :powershell do
+      puts 'Running Pester and PSAnalyzer ...'
+      system("pwsh -Command 'Invoke-Pester -EnableExit -Script ./puppet-agent-installer.tests.ps1'")
+      raise 'Violations found using Pester and PSAnalyzer' unless $CHILD_STATUS.success?
+    end
+  end
 end
 
 namespace :update do
