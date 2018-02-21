@@ -20,9 +20,10 @@ end
 
 desc 'Reek code smells'
 task :reek do
+  configuration = Reek::Configuration::AppConfiguration.from_path Pathname.new('.config.reek')
   reporter = Reek::Report::TextReport.new
-  vagrantfile_examiner = Reek::Examiner.new File.open('Vagrantfile')
-  rakefile_examiner = Reek::Examiner.new File.open('Rakefile')
+  vagrantfile_examiner = Reek::Examiner.new(File.open('Vagrantfile').read, configuration: configuration)
+  rakefile_examiner = Reek::Examiner.new(File.open('Rakefile').read, configuration: configuration)
   reporter.add_examiner vagrantfile_examiner
   reporter.add_examiner rakefile_examiner
   if reporter.smells?

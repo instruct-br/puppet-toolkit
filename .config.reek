@@ -1,0 +1,3 @@
+---
+TooManyStatements:
+  max_statements: 10
