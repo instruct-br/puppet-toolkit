@@ -75,6 +75,96 @@ def vm_command(vm_name, command)
   vagrant_run("ssh #{vm_name} --command \"sudo #{command}\"")
 end
 
+namespace :controlrepo do
+  desc 'Clone and setup all environments of a control repository'
+  task setup: %i[prepare make_environments]
+
+  desc 'Prepare a control repository by fetching and mapping all branches locally'
+  task :prepare do
+    abort('The environment variable CONTROL_REPO_URL must be set') unless ENV.key?('CONTROL_REPO_URL')
+
+    control_repo = ENV['CONTROL_REPO_URL']
+
+    if File.exist?('control-repo/.git')
+      abort("A git repository already exists at 'control-repo/'. Make sure it is empty.")
+    end
+
+    puts "Cloning control repo '#{control_repo}' ..."
+    run_git("clone #{control_repo} control-repo")
+
+    run_git('fetch --all', chdir: 'control-repo')
+
+    output = run_git('branch --no-color --list', chdir: 'control-repo')
+    default_branch = output.read.strip.gsub('* ', '')
+
+    branches = run_git('branch --no-color --list -r', chdir: 'control-repo')
+
+    branches.readlines.each do |branch|
+      branch_match = branch.strip.match(/^origin\/(?<name>[\w-]+)/)
+
+      next if branch_match && ['HEAD', default_branch].include?(branch_match[:name])
+
+      run_git("branch #{branch_match[:name]} origin/#{branch_match[:name]}", chdir: 'control-repo')
+    end
+  end
+
+  desc 'Make symlinks of the control repository branches as environments inside a VM'
+  task :make_environments do
+    vm_name = ENV.key?('VM_NAME') ? ENV['VM_NAME'] : 'puppet'
+
+    vm_up(vm_name) unless vm_running?(vm_name)
+
+    puts 'Cleaning environments directory ...'
+    vm_command(vm_name, 'rm -rf /etc/puppetlabs/code/environments/*')
+
+    output = run_git('branch --no-color --list', chdir: 'control-repo')
+
+    output.readlines.each do |line|
+      branch_name_match = line.strip.match(/^(\* )?(?<branch>[\w-]+)$/)
+      if branch_name_match
+        environment = branch_name_match[:branch]
+        puts "Creating symbolic link for environment '#{environment}' ..."
+        vm_command(vm_name, "ln -s /vagrant/control-repo /etc/puppetlabs/code/environments/#{environment}")
+      else
+        abort("Failed to detect control-repo branches: '#{line}' is not a valid branch name")
+      end
+    end
+  end
+
+  desc 'Create a branch in the control repository and set it up as an environment'
+  task :create_environment do
+    abort('The environment variable ENVIRONMENT_NAME must exist') unless ENV.key?('ENVIRONMENT_NAME')
+
+    run_git("branch #{ENV['ENVIRONMENT_NAME']} production", chdir: 'control-repo')
+  end
+
+  desc 'Deploy an environment installing its modules'
+  task :deploy_environment do
+    abort('The environment variable ENVIRONMENT_NAME must exist') unless ENV.key?('ENVIRONMENT_NAME')
+
+    vm_name = ENV.key?('VM_NAME') ? ENV['VM_NAME'] : 'puppet'
+    environment = ENV['ENVIRONMENT_NAME']
+    deploy_command = 'r10k puppetfile install -v debug'
+
+    vm_up(vm_name) unless vm_running?(vm_name)
+
+    run_git("checkout #{environment}", chdir: 'control-repo')
+
+    puts "Creating symbolic link for environment '#{environment}' ..."
+    vm_command(vm_name, "ln -s /vagrant/control-repo /etc/puppetlabs/code/environments/#{environment}")
+
+    puts 'Running r10k ...'
+    _stdin, stdout_stderr, wait_thread = Open3.popen2e(deploy_command, chdir: 'control-repo')
+
+    Thread.new do
+      stdout_stderr.each { |l| puts l }
+    end
+
+    exit_status = wait_thread.value
+
+    abort('Error running r10k command') unless exit_status.success?
+  end
+end
 
 desc 'Validate all code'
 task validate: ['validate:ruby', 'validate:installers', 'validate:yaml_files']
