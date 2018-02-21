@@ -8,6 +8,73 @@ require 'tmpdir'
 require 'open-uri'
 require 'zip'
 require 'fileutils'
+require 'open3'
+
+def run_git(arguments, popen_options = {})
+  _stdin, stdout, stderr, wait_thread = Open3.popen3("git #{arguments}", popen_options)
+
+  exit_status = wait_thread.value
+
+  abort("Failed to run git: #{stderr.read}") unless exit_status.success?
+
+  stdout
+end
+
+def vagrant_run_get_machine_output(arguments)
+  vagrant_command = "vagrant --machine-readable #{arguments}"
+
+  _stdin, stdout, stderr, wait_thread = Open3.popen3(vagrant_command)
+
+  exit_status = wait_thread.value
+
+  abort("Error: '#{vagrant_command}' #{stdout.read} #{stderr.read}") unless exit_status.success?
+
+  stdout
+end
+
+def vagrant_run(arguments)
+  vagrant_command = "vagrant #{arguments}"
+
+  _stdin, stdout_stderr, wait_thread = Open3.popen2e(vagrant_command)
+
+  Thread.new do
+    stdout_stderr.each { |line| puts line }
+  end
+
+  exit_status = wait_thread.value
+
+  abort("Error running Vagrant command: '#{vagrant_command}'") unless exit_status.success?
+end
+
+def vm_status(vm_name)
+  output = vagrant_run_get_machine_output("status #{vm_name}")
+
+  output.readlines.each do |line|
+    _timestamp, _target, type, data = line.strip.split(',')
+    return data if type == 'state'
+  end
+
+  abort("Error detecting VM '#{vm_name}' status: #{output.read}")
+end
+
+def vm_running?(vm_name)
+  status = vm_status(vm_name)
+  status == 'running'
+end
+
+def vm_up(vm_name)
+  status = vm_status(vm_name)
+
+  command = { 'poweroff' => 'up', 'saved' => 'resume' }
+
+  puts "Starting VM '#{vm_name}' ..."
+  vagrant_run("#{command[status]} #{vm_name}")
+end
+
+def vm_command(vm_name, command)
+  vagrant_run("ssh #{vm_name} --command \"sudo #{command}\"")
+end
+
 
 desc 'Validate all code'
 task validate: ['validate:ruby', 'validate:installers', 'validate:yaml_files']
