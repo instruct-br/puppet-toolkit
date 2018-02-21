@@ -9,11 +9,7 @@ before_script:
   - "sudo pwsh -Command 'Install-Module -Name PSScriptAnalyzer -SkipPublisherCheck -Force'"
   - "sudo pwsh -Command 'Install-Module -Name Pester -SkipPublisherCheck -Force'"
 script:
-  - "bundle exec rake reek"
-  - "bundle exec rake rubocop"
-  - "bundle exec rake yamllint"
-  - "bundle exec rake shellcheck"
-  - "bundle exec rake powershellcheck"
+  - "bundle exec rake validate"
 addons:
   apt:
     sources:
