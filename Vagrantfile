@@ -2,7 +2,7 @@
 
 require 'yaml'
 
-Vagrant.require_version '>= 1.9.2'
+Vagrant.require_version '>= 2.0.1'
 vagrant_root = File.dirname(__FILE__)
 
 required_plugins = ['vagrant-hosts']
