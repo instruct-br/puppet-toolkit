@@ -2,13 +2,13 @@
 
 [![Build Status](https://travis-ci.org/instruct-br/puppet-toolkit.svg?branch=master)](https://travis-ci.org/instruct-br/puppet-toolkit)
 
-This is a simple toolkit that uses Vagrant to setup virtual machines for Puppet module development and is used by [Instruct](http://instruct.com.br) developers.
+This is a simple toolkit that uses [Vagrant](https://www.vagrantup.com/) to setup virtual machines for Puppet module development and is used by [Instruct](http://instruct.com.br) developers.
 
 It is very opinionated and based on our workflow, although it should be very useful for many people.
 
 ## Quick start
 
-1. Make sure VirtualBox and Vagrant are installed
+1. Make sure VirtualBox and [Vagrant](https://www.vagrantup.com/) are installed
 2. Clone the project repository
 3. Edit `environment.yaml` to your needs if needed
 4. Run `vagrant up <VM>`
@@ -17,7 +17,7 @@ The virtual machine will have the puppet-agent package installed and ready to go
 
 ## 10-min Puppet Server start
 
-1. Make sure VirtualBox and Vagrant are installed
+1. Make sure VirtualBox and [Vagrant](https://www.vagrantup.com/) are installed
 1. Clone the project repository
 1. Edit `environment.yaml` to your needs if needed
 1. Copy `scripts/puppet.sh.sample` to `scripts/puppet.sh` and edit it to config the controlrepo name and Puppet Server role
@@ -94,7 +94,7 @@ nodes:
     box: mwrock/Windows2016
 ```
 
-The `defaults` hash has keys that configure how VirtualBox and Vagrant will work and also values that configure the VMs specified in the `nodes` hash.
+The `defaults` hash has keys that configure how VirtualBox and [Vagrant](https://www.vagrantup.com/) will work and also values that configure the VMs specified in the `nodes` hash.
 
 On the `nodes` hash there is the definition of the VMs that will be managed by Vagrant.
 
@@ -102,7 +102,7 @@ The `puppet` VM is the one that we use to setup Puppet Server and has more memor
 
 ## Boxes
 
-We chose Vagrant boxes that are as close as possible to a vanilla and minimal installation of the corresponding operating system. Better yet if the box is built and maintained by the vendor itself.
+We chose [Vagrant](https://www.vagrantup.com/) boxes that are as close as possible to a vanilla and minimal installation of the corresponding operating system. Better yet if the box is built and maintained by the vendor itself.
 
 This choice helps us greatly reduce the risk of developing code that might fail on other people's systems and also have less assumptions about what is or not installed.
 
