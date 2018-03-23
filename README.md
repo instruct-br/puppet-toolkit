@@ -8,7 +8,7 @@ It is very opinionated and based on our workflow, although it should be very use
 
 ## Quick start
 
-1. Make sure VirtualBox and [Vagrant](https://www.vagrantup.com/) are installed
+1. Make sure [VirtualBox](https://www.virtualbox.org/) and [Vagrant](https://www.vagrantup.com/) are installed
 2. Clone the project repository
 3. Edit `environment.yaml` to your needs if needed
 4. Run `vagrant up <VM>`
@@ -17,7 +17,7 @@ The virtual machine will have the puppet-agent package installed and ready to go
 
 ## 10-min Puppet Server start
 
-1. Make sure VirtualBox and [Vagrant](https://www.vagrantup.com/) are installed
+1. Make sure [VirtualBox](https://www.virtualbox.org/) and [Vagrant](https://www.vagrantup.com/) are installed
 1. Clone the project repository
 1. Edit `environment.yaml` to your needs if needed
 1. Copy `scripts/puppet.sh.sample` to `scripts/puppet.sh` and edit it to config the controlrepo name and Puppet Server role
@@ -94,7 +94,7 @@ nodes:
     box: mwrock/Windows2016
 ```
 
-The `defaults` hash has keys that configure how VirtualBox and [Vagrant](https://www.vagrantup.com/) will work and also values that configure the VMs specified in the `nodes` hash.
+The `defaults` hash has keys that configure how [VirtualBox](https://www.virtualbox.org/) and [Vagrant](https://www.vagrantup.com/) will work and also values that configure the VMs specified in the `nodes` hash.
 
 On the `nodes` hash there is the definition of the VMs that will be managed by Vagrant.
 
