@@ -108,9 +108,6 @@ This choice helps us greatly reduce the risk of developing code that might fail 
 
 ## TODO
 
-* Document our workflow
-* Document `local.yaml` usage
-* Instructions on how to configure text editor, tests, etc.
 * Minimalistic Puppet module to configure Puppet Server
 * Rake task for installing puppet agent on developers system
 * Rake task for deploying tools (r10k, puppet-lint, rspec, etc)
