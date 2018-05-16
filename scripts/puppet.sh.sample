@@ -17,8 +17,11 @@ ROLE_NAME=''
 
 echo "===>>> Preparing the Puppet Server environment ..."
 cd /etc/puppetlabs/code/environments/
-rm -rf production/
-ln -s /vagrant/$CONTROL_REPO production
+if [[ ! -L production ]]
+then
+    rm -rf production/
+    ln -s /vagrant/$CONTROL_REPO production
+fi
 
 echo "===>>> Provisioning Puppet Server ..."
 puppet apply -e "include $ROLE_NAME"
