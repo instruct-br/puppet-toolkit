@@ -69,13 +69,9 @@ detect_ubuntu_1804 ( ) {
       curl -s -O http://apt.puppet.com/puppet5-release-bionic.deb
       dpkg -i puppet5-release-bionic.deb
       rm -f puppet5-release-bionic.deb
-    else
-      curl -s -O http://apt.puppet.com/puppetlabs-release-pc1-bionic.deb
-      dpkg -i puppetlabs-release-pc1-bionic.deb
-      rm -f puppetlabs-release-pc1-bionic.deb
+      apt-get update
+      apt-get install "puppet-agent=${PUPPET_AGENT_VERSION}*"
     fi
-    apt-get update
-    apt-get install "puppet-agent=${PUPPET_AGENT_VERSION}*"
   fi
 
 }
