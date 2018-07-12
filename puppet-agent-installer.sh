@@ -65,13 +65,11 @@ detect_ubuntu_1804 ( ) {
 
   if grep -E 'DISTRIB_RELEASE=18.04' /etc/lsb-release &> /dev/null; then
     cd /tmp
-    if [[ ${PUPPET_5} -eq 0 ]] ; then
-      curl -s -O http://apt.puppet.com/puppet5-release-bionic.deb
-      dpkg -i puppet5-release-bionic.deb
-      rm -f puppet5-release-bionic.deb
-      apt-get update
-      apt-get install "puppet-agent=${PUPPET_AGENT_VERSION}*"
-    fi
+    curl -s -O http://apt.puppet.com/puppet5-release-bionic.deb
+    dpkg -i puppet5-release-bionic.deb
+    rm -f puppet5-release-bionic.deb
+    apt-get update
+    apt-get install "puppet-agent=${PUPPET_AGENT_VERSION}*"
   fi
 
 }
