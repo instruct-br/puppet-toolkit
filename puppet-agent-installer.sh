@@ -61,6 +61,19 @@ detect_rhel_or_oracle_5 ( ) {
 
 }
 
+detect_ubuntu_1804 ( ) {
+
+  if grep -E 'DISTRIB_RELEASE=18.04' /etc/lsb-release &> /dev/null; then
+    cd /tmp
+    curl -s -O http://apt.puppet.com/puppet5-release-bionic.deb
+    dpkg -i puppet5-release-bionic.deb
+    rm -f puppet5-release-bionic.deb
+    apt-get update
+    apt-get install "puppet-agent=${PUPPET_AGENT_VERSION}*"
+  fi
+
+}
+
 detect_ubuntu_1604 ( ) {
 
   if grep -E 'DISTRIB_RELEASE=16.04' /etc/lsb-release &> /dev/null; then
@@ -228,6 +241,7 @@ detect_sles_11 ( ) {
 detect_rhel_or_oracle_5
 detect_rhel_or_oracle_6
 detect_rhel_or_oracle_7
+detect_ubuntu_1804
 detect_ubuntu_1604
 detect_ubuntu_1404
 detect_ubuntu_1204

@@ -17,6 +17,9 @@ nodes:
     box: centos/6
   centos-5:
     box: gutocarvalho/centos5x64nocm
+  ubuntu-18.04:
+    box: ubuntu/bionic64
+    puppet_agent_version: '5.5.2' # First release
   ubuntu-16.04:
     box: ubuntu/xenial64
   ubuntu-14.04:
