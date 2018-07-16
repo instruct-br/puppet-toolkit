@@ -37,7 +37,7 @@ defaults:
   domain: 'dev'
   network_prefix: '172.22.0'
   synced_folder_type: 'nfs'
-  puppet_agent_version: '1.10.12'
+  puppet_agent_version: '5.5.3'
 nodes:
   puppet:
     memory: 2048
@@ -51,7 +51,6 @@ nodes:
     box: gutocarvalho/centos5x64nocm
   ubuntu-18.04:
     box: ubuntu/bionic64
-    puppet_agent_version: '5.5.2' # First release
   ubuntu-16.04:
     box: ubuntu/xenial64
   ubuntu-14.04:
@@ -65,6 +64,7 @@ nodes:
     box: debian/jessie64
   debian-7:
     box: debian/wheezy64
+    puppet_agent_version: '5.5.1' # Latest release
   debian-6:
     box: gutocarvalho/debian6x64nocm
     puppet_agent_version: '1.4.1' # Latest release
