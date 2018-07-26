@@ -87,7 +87,7 @@ nodes:
     box_url: http://yum.oracle.com/boxes/oraclelinux/ol74/ol74.box
   oracle-6:
     box: oracle/6
-    box_url: http://yum.oracle.com/boxes/oraclelinux/ol69/ol69.box
+    box_url: https://yum.oracle.com/boxes/oraclelinux/ol610/ol610.box
   oracle-5:
     box: gutocarvalho/oracle5x64nocm
   windows-2016:
