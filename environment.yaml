@@ -5,7 +5,7 @@ defaults:
   domain: 'dev'
   network_prefix: '172.22.0'
   synced_folder_type: 'nfs'
-  puppet_agent_version: '5.5.3'
+  puppet_agent_version: '5.5.4'
 nodes:
   puppet:
     memory: 2048
