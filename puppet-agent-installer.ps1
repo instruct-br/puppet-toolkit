@@ -29,11 +29,14 @@ param(
 )
 
 if ($PuppetVersion) {
-    $isPuppetFive = ($PuppetVersion[0] -eq '5')
-    if ($isPuppetFive) {
-        $MsiUrl = "https://downloads.puppet.com/windows/puppet5/puppet-agent-$($PuppetVersion)-x64.msi"
+    if ($PuppetVersion[0] -eq '6') {
+        $MsiUrl = "https://downloads.puppet.com/windows/puppet6/puppet-agent-$($PuppetVersion)-x64.msi"
     } else {
-        $MsiUrl = "https://downloads.puppet.com/windows/puppet-agent-$($PuppetVersion)-x64.msi"
+        if ($PuppetVersion[0] -eq '5') {
+            $MsiUrl = "https://downloads.puppet.com/windows/puppet5/puppet-agent-$($PuppetVersion)-x64.msi"
+        } else {
+            $MsiUrl = "https://downloads.puppet.com/windows/puppet-agent-$($PuppetVersion)-x64.msi"
+        }
     }
     Write-Output "Puppet version $PuppetVersion specified, updated MsiUrl to `"$MsiUrl`""
 }

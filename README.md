@@ -103,6 +103,8 @@ On the `nodes` hash there is the definition of the VMs that will be managed by V
 
 The `puppet` VM is the one that we use to setup Puppet Server and has more memory and CPUs than the other nodes, which will use the values from `defaults` if not specified.
 
+You can use Puppet agent from 4 to 6.
+
 ## Boxes
 
 We chose [Vagrant](https://www.vagrantup.com/) boxes that are as close as possible to a vanilla and minimal installation of the corresponding operating system. Better yet if the box is built and maintained by the vendor itself.
