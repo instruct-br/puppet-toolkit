@@ -111,6 +111,19 @@ We chose [Vagrant](https://www.vagrantup.com/) boxes that are as close as possib
 
 This choice helps us greatly reduce the risk of developing code that might fail on other people's systems and also have less assumptions about what is or not installed.
 
+You can use the `box_version` parameter to use a box specific version. By default all boxes try to use the latest version available *in the host*. Vagrant will try to download the box if you do not have the choosen version in your environment, and an error will be throw if the version is not available. To declare a version, follow this example in your `local.yaml` (preferred) or `environment.yaml`:
+
+```yaml
+...
+  centos-7-2018:
+    box: centos/7
+    box_version: '1812.01'
+  bionic-64-newyear:
+    box: ubuntu/bionic64
+    box_version: '20190101.0.0'
+...
+```
+
 ## TODO
 
 * Minimalistic Puppet module to configure Puppet Server
