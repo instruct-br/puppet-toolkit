@@ -2,7 +2,7 @@
 defaults:
   memory: 1024
   cpus: 1
-  domain: 'dev'
+  domain: 'test'
   network_prefix: '172.22.0'
   synced_folder_type: 'nfs'
   puppet_agent_version: '5.5.4' # Supports Puppet version from 4 to 6
