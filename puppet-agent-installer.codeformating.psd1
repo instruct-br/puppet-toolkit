@@ -26,7 +26,7 @@
             Enable = $true
             Kind = 'space'
             IndentationSize = 4
-            PipelineIndentation = NoIndentation
+            PipelineIndentation = "NoIndentation"
         }
 
         PSUseConsistentWhitespace = @{
