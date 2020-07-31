@@ -215,7 +215,7 @@ namespace :validate do
     desc 'Validate PowerShell installer'
     task :powershell do
       puts 'Running Pester and PSAnalyzer ...'
-      system("pwsh -Command 'Invoke-Pester -EnableExit -Script ./puppet-agent-installer.tests.ps1'")
+      system("pwsh -Command 'Invoke-Pester -CI -Output Detailed -Path ./puppet-agent-installer.tests.ps1'")
       raise 'Violations found using Pester and PSAnalyzer' unless $CHILD_STATUS.success?
     end
   end
