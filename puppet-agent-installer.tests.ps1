@@ -1,48 +1,50 @@
-Describe 'Testing against PSSA rules' {
-  Context 'PSSA Standard Rules' {
-		$scriptAnalyzerRules = Get-ScriptAnalyzerRule
+Describe 'Running PSAnalyser scripts' {
 
-    $analysis = Invoke-ScriptAnalyzer -Path 'puppet-agent-installer.ps1'
+    Context 'Validating puppet-agent-installer.ps1' {
 
-    forEach ($rule in $scriptAnalyzerRules) {
-			It "Should pass $rule" {
-			  If ($analysis.RuleName -contains $rule) {
-			    $analysis | Where RuleName -EQ $rule -outvariable failures | Out-Default
-			    $failures.Count | Should Be 0
-			  }
-			}
+        BeforeAll {
+            $analysis = Invoke-ScriptAnalyzer -Settings puppet-agent-installer.codeformating.psd1 -Path ./puppet-agent-installer.ps1
+        }
+
+        $TestCases = @()
+        Get-ScriptAnalyzerRule | Select-Object -Property RuleName | Foreach-object -Process { $TestCases += @{ RuleName = $_.RuleName } }
+
+        It -Name "Should pass <RuleName>" -TestCases $TestCases {
+            param($RuleName)
+            $analysis | Where-Object RuleName -EQ $RuleName -outvariable failures | Out-Default
+            $failures.Count | Should -Be 0
+        }
     }
-  }
 
-  Context 'PSSA CodeFormatting Rules' {
+    Context 'Validating puppet-agent-installer.codeformating.psd1' {
 
-	 $scriptAnalyzerRules = Get-ScriptAnalyzerRule
+        BeforeAll {
+            $analysis = Invoke-ScriptAnalyzer -Settings ./puppet-agent-installer.codeformating.psd1 -Path ./puppet-agent-installer.codeformating.psd1
+        }
 
-   $analysis = Invoke-ScriptAnalyzer -Settings puppet-agent-installer.codeformating.psd1 -Path 'puppet-agent-installer.ps1'
+        $TestCases = @()
+        Get-ScriptAnalyzerRule | Select-Object -Property RuleName | Foreach-object -Process { $TestCases += @{ RuleName = $_.RuleName } }
 
-    forEach ($rule in $scriptAnalyzerRules) {
-			It "Should pass $rule" {
-			  If ($analysis.RuleName -contains $rule) {
-			    $analysis | Where RuleName -EQ $rule -outvariable failures | Out-Default
-			    $failures.Count | Should Be 0
-			  }
-			}
-		}
-	}
+        It -Name "Should pass <RuleName>" -TestCases $TestCases {
+            param($RuleName)
+            $analysis | Where-Object RuleName -EQ $RuleName -outvariable failures | Out-Default
+            $failures.Count | Should -Be 0
+        }
+    }
 
-  Context 'PSSA Data File CodeFormatting ' {
+    Context 'Validating puppet-agent-installer.tests.ps1' {
 
-	 $scriptAnalyzerRules = Get-ScriptAnalyzerRule
+        BeforeAll {
+            $analysis = Invoke-ScriptAnalyzer -Settings ./puppet-agent-installer.codeformating.psd1 -Path ./puppet-agent-installer.tests.ps1
+        }
 
-   $analysis = Invoke-ScriptAnalyzer -Settings puppet-agent-installer.codeformating.psd1 -Path 'puppet-agent-installer.codeformating.psd1'
+        $TestCases = @()
+        Get-ScriptAnalyzerRule | Select-Object -Property RuleName | Foreach-object -Process { $TestCases += @{ RuleName = $_.RuleName } }
 
-    forEach ($rule in $scriptAnalyzerRules) {
-			It "Should pass $rule" {
-			  If ($analysis.RuleName -contains $rule) {
-			    $analysis | Where RuleName -EQ $rule -outvariable failures | Out-Default
-			    $failures.Count | Should Be 0
-			  }
-			}
-		}
-	}
+        It -Name "Should pass <RuleName>" -TestCases $TestCases {
+            param($RuleName)
+            $analysis | Where-Object RuleName -EQ $RuleName -outvariable failures | Out-Default
+            $failures.Count | Should -Be 0
+        }
+    }
 }
