@@ -1,8 +1,8 @@
 language: ruby
-dist: trusty
+dist: xenial
 sudo: required
 rvm:
-  - 2.4
+  - 2.7
 before_script:
   - "curl -o /tmp/shellcheck-latest.linux.x86_64.tar.xz https://storage.googleapis.com/shellcheck/shellcheck-latest.linux.x86_64.tar.xz"
   - "sudo tar -xf /tmp/shellcheck-latest.linux.x86_64.tar.xz --strip-components 1 -C /usr/bin/ shellcheck-latest/shellcheck"
@@ -13,7 +13,7 @@ script:
 addons:
   apt:
     sources:
-      - sourceline: "deb [arch=amd64] https://packages.microsoft.com/ubuntu/14.04/prod trusty main"
+      - sourceline: "deb [arch=amd64] https://packages.microsoft.com/ubuntu/16.04/prod trusty main"
         key_url: "https://packages.microsoft.com/keys/microsoft.asc"
     packages:
       - powershell
