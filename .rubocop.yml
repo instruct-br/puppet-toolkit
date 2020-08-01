@@ -1,6 +1,7 @@
 ---
 AllCops:
-  TargetRubyVersion: 2.4
+  NewCops: enable
+  TargetRubyVersion: 2.7
   DisplayCopNames: true
   Exclude:
     - 'control-repo/**/*'
@@ -9,7 +10,10 @@ AllCops:
 Metrics/BlockLength:
   Enabled: false
 
-Metrics/LineLength:
+Lint/MixedRegexpCaptureTypes:
+  Enabled: false
+
+Layout/LineLength:
   Max: 110
 
 Style/RegexpLiteral:
