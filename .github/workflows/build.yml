@@ -22,7 +22,8 @@ jobs:
       - name: Install PowerShell
         run: |
           sudo bash -c 'echo "deb [arch=amd64] https://packages.microsoft.com/ubuntu/18.04/prod bionic main" > /etc/apt/sources.list.d/microsoft.list'
-          sudo curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+          sudo curl -o /tmp/microsoft.asc https://packages.microsoft.com/keys/microsoft.asc
+          sudo apt-key add /tmp/microsoft.asc
           sudo apt-get update
           sudo apt-get install powershell
           pwsh -Command 'Install-Module -Name PSScriptAnalyzer -SkipPublisherCheck -Force'
