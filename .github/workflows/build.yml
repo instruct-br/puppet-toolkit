@@ -21,7 +21,7 @@ jobs:
           sudo tar -xf /tmp/shellcheck-latest.linux.x86_64.tar.xz --strip-components 1 -C /usr/bin/ shellcheck-latest/shellcheck
       - name: Install PowerShell
         run: |
-          sudo bash -c 'echo "deb [arch=amd64] https://packages.microsoft.com/ubuntu/18.04/prod bionic main" > /etc/apt/sources.d/microsoft.list'
+          sudo bash -c 'echo "deb [arch=amd64] https://packages.microsoft.com/ubuntu/18.04/prod bionic main" > /etc/apt/sources.list.d/microsoft.list'
           sudo curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
           sudo apt-get update
           sudo apt-get install powershell
