@@ -1,6 +1,6 @@
 # Toolkit for Puppet module development
 
-[![Build Status](https://travis-ci.org/instruct-br/puppet-toolkit.svg?branch=master)](https://travis-ci.org/instruct-br/puppet-toolkit)
+![Build Status](https://github.com/instruct-br/puppet-toolkit/workflows/Puppet%20Toolkit%20Tests/badge.svg)
 
 This is a simple toolkit that uses [Vagrant](https://www.vagrantup.com/) to setup virtual machines for Puppet module development and is used by [Instruct](http://instruct.com.br) developers.
 
