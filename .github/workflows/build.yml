@@ -1,0 +1,36 @@
+---
+name: Puppet Tolkit Tests
+
+on:
+  push:
+  pull_resquest:
+  schedule:
+    - cron: '0 0 * * 0'
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+  steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+    - name: Install ShellCheck
+      run: |
+        curl -o /tmp/shellcheck-latest.linux.x86_64.tar.xz https://storage.googleapis.com/shellcheck/shellcheck-latest.linux.x86_64.tar.xz
+        sudo tar -xf /tmp/shellcheck-latest.linux.x86_64.tar.xz --strip-components 1 -C /usr/bin/ shellcheck-latest/shellcheck
+    - name: Install PowerShell
+      run: |
+        sudo echo "deb [arch=amd64] https://packages.microsoft.com/ubuntu/18.04/prod bionic main" > /etc/apt/sources.d/microsoft.list
+        sudo curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+        sudo apt-get update
+        sudo apt-get install powershell
+        pwsh -Command 'Install-Module -Name PSScriptAnalyzer -SkipPublisherCheck -Force'
+        pwsh -Command 'Install-Module -Name Pester -SkipPublisherCheck -Force'
+    - name: Install Ruby Dependencies
+      run: |
+        gem install bundler
+        bundle install
+    - name: Run Tests
+      run: |
+        bundle exec rake validate 
