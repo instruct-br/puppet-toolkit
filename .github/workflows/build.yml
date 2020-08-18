@@ -1,5 +1,5 @@
 ---
-name: Puppet Tolkit Tests
+name: Puppet Toolkit Tests
 
 on:
   push:
