@@ -17,7 +17,7 @@ jobs:
           ruby-version: '2.7'
       - name: Install ShellCheck
         run: |
-          curl -o /tmp/shellcheck-latest.linux.x86_64.tar.xz https://github.com/koalaman/shellcheck/releases/download/latest/shellcheck-latest.linux.x86_64.tar.xz
+          curl -L -o /tmp/shellcheck-latest.linux.x86_64.tar.xz https://github.com/koalaman/shellcheck/releases/download/latest/shellcheck-latest.linux.x86_64.tar.xz
           sudo tar -xf /tmp/shellcheck-latest.linux.x86_64.tar.xz --strip-components 1 -C /usr/bin/ shellcheck-latest/shellcheck
       - name: Install PowerShell
         run: |
